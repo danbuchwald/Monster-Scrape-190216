@@ -1,0 +1,1 @@
+Scrapes the D&D database and combines monster data into a more easily-used format.
