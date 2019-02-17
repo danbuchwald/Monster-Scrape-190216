@@ -7,9 +7,10 @@ const mongoose = require("mongoose");
 const axios = require("axios");
 
 const port = process.env.PORT;
-const dataFromDB = require("./response.json");
+const dataFromAPI = require("./response.json");
 
 mongoose.Promise = global.Promise;
+
 mongoose
   .connect(process.env.DB, { useNewUrlParser: true })
   .then(
@@ -17,14 +18,19 @@ mongoose
     err => console.log("Cannot connect to database " + err)
   );
 
-const currentEntry = dataFromDB.results[0].url;
+let db = mongoose.connection;
+
+const currentEntry = dataFromAPI.results[0].url;
 console.log("First entry:", currentEntry);
 
-axios
-  .get(currentEntry)
-  .then(response => console.log(response.data))
-  .catch(err => console.log(err));
-  
+for (let i = 0; i < 4; i += 1) {
+  axios
+    .get(dataFromAPI.results[i].url)
+    .then(response => console.log(response.data.name))
+    .catch(err => console.log(err));
+    console.log(`Monster number ${i} retrieved: *************`)
+}
+
 app.get("/", (req, res) => {
   res.send("Hello world!!!!");
 });
