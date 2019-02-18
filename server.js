@@ -18,8 +18,6 @@ mongoose
     err => console.log("Cannot connect to database " + err)
   );
 
-let db = mongoose.connection;
-
 const monsterSchema = new mongoose.Schema({
   api_index: Number,
   name: String,
