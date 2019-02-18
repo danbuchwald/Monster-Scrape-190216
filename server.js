@@ -21,9 +21,14 @@ mongoose
 let db = mongoose.connection;
 
 const monsterSchema = new mongoose.Schema({
+  api_index: Number,
   name: String,
+  number_appearing: String,
   alignment: String,
-  hit_dice: String
+  hit_dice: String,
+  type: String,
+  frequency: String,
+  habitat: String
 });
 
 const Monster = mongoose.model("Monster", monsterSchema);
@@ -31,12 +36,26 @@ const Monster = mongoose.model("Monster", monsterSchema);
 const currentEntry = dataFromAPI.results[0].url;
 console.log("First entry:", currentEntry);
 
-for (let i = 0; i < 4; i += 1) {
+for (let i = 0; i < 325; i += 1) {
   axios
     .get(dataFromAPI.results[i].url)
-    .then(response => console.log(response.data.name))
+    .then(response => {
+      let monster = new Monster({
+        api_index: response.data.index,
+        name: response.data.name,
+        number_appearing: "TK",
+        alignment: response.data.alignment,
+        hit_dice: response.data.hit_dice,
+        type: response.data.type,
+        frequency: "TK",
+        habitat: "TK"
+      });
+      monster.save(err => {
+        if (err) return next(err);
+      });
+      console.log(response.data.name + " created successfully");
+    })
     .catch(err => console.log(err));
-  console.log(`Monster number ${i} retrieved: *************`);
 }
 
 app.get("/", (req, res) => {
