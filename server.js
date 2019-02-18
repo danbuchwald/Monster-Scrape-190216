@@ -20,6 +20,14 @@ mongoose
 
 let db = mongoose.connection;
 
+const monsterSchema = new mongoose.Schema({
+  name: String,
+  alignment: String,
+  hit_dice: String
+});
+
+const Monster = mongoose.model("Monster", monsterSchema);
+
 const currentEntry = dataFromAPI.results[0].url;
 console.log("First entry:", currentEntry);
 
@@ -28,7 +36,7 @@ for (let i = 0; i < 4; i += 1) {
     .get(dataFromAPI.results[i].url)
     .then(response => console.log(response.data.name))
     .catch(err => console.log(err));
-    console.log(`Monster number ${i} retrieved: *************`)
+  console.log(`Monster number ${i} retrieved: *************`);
 }
 
 app.get("/", (req, res) => {
